@@ -1,0 +1,62 @@
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:alpine
+    restart: always
+    volumes:
+      - ./logs:/logs
+      - ./frontend/app:/frontend:ro
+      - ./frontend/doc:/doc:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/dhparam.pem:/etc/nginx/dhparam.pem:ro
+      - ./certificates:/certificates:ro
+      - /etc/localtime:/etc/localtime:ro
+    network_mode: host
+
+  certbot:
+    container_name: certbot
+    image: certbot/dns-ovh:latest
+    volumes:
+      - ./certificates:/etc/letsencrypt/
+      - ./certbot/config.ini:/config.ini:ro
+      - ./certbot/credentials.ini:/credentials.ini:ro
+      - certbot_data:/var/lib/letsencrypt
+    command: certonly -v --config /config.ini --dns-ovh --dns-ovh-credentials /credentials.ini --non-interactive -d 
+
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Backend-Dockerfile
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+    ports:
+      - 5300:5300
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  keychain:
+    container_name: keychain
+    build:
+      context: .
+      dockerfile: Keychain-Dockerfile
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+    ports:
+      - 5400:5400
+    restart: always
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/localtime:/etc/localtime:ro
+    command: --cleanup --interval 14400
+
+volumes:
+  certbot_data:

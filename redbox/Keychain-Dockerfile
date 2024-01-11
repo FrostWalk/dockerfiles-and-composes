@@ -1,0 +1,14 @@
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
+
+USER app
+
+WORKDIR /app
+
+EXPOSE 5300
+
+COPY --chown=app --chmod=755 keychain/* .
+
+ENV DOTNET_RUNNING_IN_CONTAINER=true
+ENV ASPNETCORE_ENVIRONMENT=Development
+
+ENTRYPOINT ["./Keychain"]
