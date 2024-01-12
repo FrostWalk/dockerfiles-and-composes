@@ -1,5 +1,7 @@
 #!/bin/bash
 
+IMAGE_NAME="github-runner"
+
 case $(uname -m) in
     x86_64)
         ARCH="x64"
@@ -26,7 +28,7 @@ mkdir -p runner
 echo "unpacking runner.tgz"
 tar -zxf runner.tgz -C runner
 
-docker build -t github-runner .
+docker build -t ${IMAGE_NAME} .
 
 echo "cleaning"
 rm -rf runner runner.tgz

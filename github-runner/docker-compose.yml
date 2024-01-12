@@ -1,10 +1,7 @@
 services:
-  lfc-runner:
-    container_name: lfc-runner
-    build:
-      context: .
-      dockerfile: ./Dockerfile
-    image: lfc-runner
+  github-runner:
+    container_name: github-runner
+    image: github-runner
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
     restart: "no"
