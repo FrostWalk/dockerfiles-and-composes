@@ -2,7 +2,7 @@ FROM debian:stable-slim
 
 # installation settings
 ARG TL_MIRROR="https://texlive.info/CTAN/systems/texlive/tlnet"
-ARG TL_YEAR="2023"
+ARG TL_YEAR="2024"
 
 ADD ./runner runner
 
