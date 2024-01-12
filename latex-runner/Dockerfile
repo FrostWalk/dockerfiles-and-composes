@@ -12,7 +12,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 SHELL ["bash", "-c"]
 
-RUN ./bin/installdependencies.sh && apt-get install -y perl jq curl fontconfig build-essential gnupg ghostscript python3-pygments && apt-get autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
+RUN ./bin/installdependencies.sh && apt-get install -y perl jq curl git fontconfig build-essential gnupg ghostscript python3-pygments && apt-get autoclean && apt-get autoremove --yes && rm -rf /var/lib/{apt,dpkg,cache,log}/
 
 RUN mkdir "/tmp/texlive" && cd "/tmp/texlive" && \
     curl -O -L "$TL_MIRROR/install-tl-unx.tar.gz" && \
